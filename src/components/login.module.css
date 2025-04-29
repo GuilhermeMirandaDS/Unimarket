@@ -1,0 +1,113 @@
+.active{
+    border-bottom: solid 2px #0377FF !important;
+}
+*{
+    font-family: 'Lexend', sans-serif;
+    color: #191919;
+}
+body{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15%;
+}
+.container{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.login-form{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.trocar-aba{
+    display: flex;
+    justify-content: center;
+    gap: 8rem;
+}
+.trocar-aba button{
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    color: #0377FF;
+    font-weight: 700;
+    font-family: 'Lexend', sans-serif;
+    padding-bottom: 6px;
+}
+.trocar-aba button:hover{
+    cursor: pointer;
+    filter: brightness(90%);
+}
+.signin, .login{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px;
+    width: 400px;
+    padding: 20px;
+    border-radius: 4px;
+}
+.signin button, .login button{
+    width: 100%;
+    border: none;
+    padding: 0.7rem 2rem;
+    font-weight: 600;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    background-color: #0377FF;
+    color: white;
+    border-radius: 4px;
+    transition: ease-in-out 200ms;
+}
+.signin button:hover, .login button:hover{
+    cursor: pointer;
+    filter: brightness(90%);
+    transition: ease-in-out 200ms;
+}
+.signin input, .login input{
+    border: none;
+    border-bottom: solid 1px rgb(189, 189, 189);
+    padding: 0 0 8px 0;
+    width: 100%;
+    outline: none;
+}
+.form-input{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.form-input p{
+    font-weight: 700;
+    font-size: 20px;
+}
+h2{
+    font-weight: 200;
+}
+.slogan{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 815px;
+}
+.titulo{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 30px;
+    gap: 0px 10px;
+}
+.titulo h1{
+    margin: 0 !important;
+    font-weight: 700;
+}
+.subtext{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-weight: 400;
+}
+.signin-link, .unimarket{
+    color: #0377FF;
+    font-weight: 600;
+    text-decoration: none;
+}

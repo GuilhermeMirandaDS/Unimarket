@@ -5,7 +5,8 @@
     <div class="container">
         <div class="slogan">
             <div class="titulo">
-                <h1>Faça login para navegar pelo</h1>
+                <h1>Faça login para navegar</h1>
+                <h1>pelo</h1>
                 <h1 class="unimarket">Unimarket</h1>
             </div>
             <div class="subtext">
@@ -104,6 +105,7 @@
     }
     *{
         font-family: 'Lexend', sans-serif;
+        color: #191919;
     }
     body{
         display: flex;
@@ -112,8 +114,8 @@
     }
     .container{
         display: flex;
-        justify-content: space-between;
-        width: 1200px;
+        justify-content: space-evenly;
+        width: 100%;
     }
     .login-form{
       display: flex;
@@ -136,7 +138,6 @@
     .trocar-aba button:hover{
       cursor: pointer;
       filter: brightness(90%);
-      transition: ease-in-out 200ms;
     }
     .signin, .login{
         display: flex;
@@ -145,6 +146,8 @@
         align-items: center;
         gap: 20px;
         width: 400px;
+        padding: 20px;
+        border-radius: 4px;
     }
     .signin button, .login button{
         width: 100%;
@@ -165,7 +168,7 @@
     .signin input, .login input{
         border: none;
         border-bottom: solid 1px rgb(189, 189, 189);
-        padding: 0.5rem 0;
+        padding: 0 0 8px 0;
         width: 100%;
         outline: none;
     }
@@ -187,13 +190,14 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        max-width: 600px;
+        max-width: 815px;
     }
     .titulo{
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         font-size: 30px;
+        gap: 0px 10px;
     }
     .titulo h1{
         margin: 0 !important;
@@ -204,8 +208,11 @@
         flex-direction: row;
         align-items: center;
         gap: 10px;
+        font-weight: 400;
     }
     .signin-link, .unimarket{
         color: #0377FF;
+        font-weight: 600;
+        text-decoration: none;
     }
 </style>
