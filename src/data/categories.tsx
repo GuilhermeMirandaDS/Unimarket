@@ -8,7 +8,7 @@ const categories = [
   {
     id: 2,
     name: "Doces",
-    icon: "https://images.unsplash.com/photo-1607920592519-aedf6e3b00fe?q=80&w=400&auto=format"
+    icon: "https://saborecia.com.br/wp-content/uploads/2020/08/MG_4421-scaled.jpg"
   },
   {
     id: 3,

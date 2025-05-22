@@ -11,6 +11,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./hooks/use-cart";
+import "./global.css";
 
 const queryClient = new QueryClient();
 

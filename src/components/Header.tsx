@@ -34,7 +34,7 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
           <div className="menu-nav">
             <div className="container md:flex mx-auto px-4 py-3" style={{gap: "20px"}}>
               <a className="menu-tab" href="/">Página Inicial</a>
-              <ul className="first-level md:flex items-center px-2">
+              <div className="menu-tab first-level md:flex items-end px-2">
                 Produtos
                 <svg width="20px" height="20px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" >
 
@@ -44,9 +44,12 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
                 </g>
                 </svg>
                 <ul className="second-level">
-                  <li className="menu-item"></li>
+                  <li className="menu-subitem">item 1</li>
+                  <li className="menu-subitem">item 1</li>
+                  <li className="menu-subitem">item 1</li>
+                  <li className="menu-subitem">item 1</li>
                 </ul>
-              </ul>
+              </div>
               <a className="menu-tab" href="/">Sobre Nós</a>
               <a className="menu-tab" href="/">Sobre a Unimar</a>
             </div>

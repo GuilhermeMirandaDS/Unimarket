@@ -73,16 +73,18 @@ const ProductsPage = () => {
       <Header onSearch={handleSearch} />
 
       <main className="container mx-auto px-4 py-6">
-        {/* Hero Banner */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-xl p-6 mb-8 text-white">
+        {/* Banner principal */}
+        <div className="banner-home rounded-xl p-6 mb-8 text-white">
           <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-6 md:mb-0 md:mr-6">
-              <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                Bem-vindo ao Unimarket
-              </h1>
-              <p className="text-lg md:text-xl mb-4">
-                O que você está procurando?
-              </p>
+            <div className="apresentation mb-6 md:mb-0 md:mr-6">
+              <div className="pre-top">
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">
+                  Bem-vindo ao Unimarket
+                </h1>
+                <p className="text-lg md:text-xl mb-4">
+                  O que você está procurando?
+                </p>  
+              </div>
               <div className="flex gap-2">
                 <Button variant="secondary" size="sm">
                   Ver descontos
@@ -92,19 +94,12 @@ const ProductsPage = () => {
                 </Button>
               </div>
             </div>
-            <div className="flex-shrink-0">
-              <img
-                src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?q=80&w=300&auto=format"
-                alt="Estudantes"
-                className="w-48 h-32 object-cover rounded-lg"
-              />
-            </div>
           </div>
         </div>
 
-        {/* Categories */}
+        {/* Categorias */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Categorias</h2>
+          {/* <h2 className="text-xl font-bold mb-4">Categorias</h2> */}
           <div className="grid grid-cols-4 md:grid-cols-7 gap-3">
             {categories.map((category) => (
               <CategoryButton
