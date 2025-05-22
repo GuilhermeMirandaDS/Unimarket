@@ -16,6 +16,7 @@ export interface ProductProps {
   seller: {
     name: string;
     avatar: string;
+    graduation: string;
   };
 }
 
@@ -60,7 +61,8 @@ const ProductCard = ({
       </div>
 
       <div className="p-4">
-        <div className="flex items-center space-x-1 mb-1">
+        <h3 className="product-name">{name}</h3>
+        <div className="rating flex items-center space-x-1">
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
@@ -79,31 +81,31 @@ const ProductCard = ({
           </span>
         </div>
 
-        <h3 className="font-medium text-sm line-clamp-2 h-10 mb-1">{name}</h3>
-
-        <div className="flex justify-between items-center mt-2">
-          <div>
-            <p className="font-bold text-lg">R$ {price.toFixed(2)}</p>
-          </div>
-
-          <div className="flex items-center">
-            <img
-              src={seller.avatar}
-              alt={seller.name}
-              className="w-5 h-5 rounded-full mr-1"
-            />
-            <span className="text-xs text-gray-500">{seller.name}</span>
+        <span className="seller-title">Vendedor(a):</span>
+        <div className="seller flex items-center">
+          <img
+            src={seller.avatar}
+            alt={seller.name}
+            className="seller-img"
+          />
+          <div className="seller-info">
+            <span className="seller-name">{seller.name}</span>
+            <span className="seller-grad">{seller.graduation}</span>
           </div>
         </div>
 
-        <Button
-          onClick={handleAddToCart}
-          className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
-          size="sm"
-        >
-          <ShoppingCart className="h-4 w-4 mr-1" />
-          Adicionar
-        </Button>
+
+        <div className="buy-form">
+          <p className="card-price">R$ {price.toFixed(2)}</p>
+          <Button
+            onClick={handleAddToCart}
+            className="buy-btn mt-3 bg-blue-600 hover:bg-blue-700"
+            size="sm"
+          >
+            <ShoppingCart className="h-4 w-4" />
+          </Button>
+        </div>
+
       </div>
     </div>
   );

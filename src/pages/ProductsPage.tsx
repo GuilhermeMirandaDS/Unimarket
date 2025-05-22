@@ -74,7 +74,7 @@ const ProductsPage = () => {
 
       <main className="container mx-auto px-4 py-6">
         {/* Banner principal */}
-        <div className="banner-home rounded-xl p-6 mb-8 text-white">
+        <div className="banner-home section rounded-xl p-6 text-white">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="apresentation mb-6 md:mb-0 md:mr-6">
               <div className="pre-top">
@@ -98,7 +98,7 @@ const ProductsPage = () => {
         </div>
 
         {/* Categorias */}
-        <div className="mb-8">
+        <div className="section">
           {/* <h2 className="text-xl font-bold mb-4">Categorias</h2> */}
           <div className="grid grid-cols-4 md:grid-cols-7 gap-3">
             {categories.map((category) => (
@@ -113,10 +113,10 @@ const ProductsPage = () => {
           </div>
         </div>
 
-        {/* Best Offers - Carousel */}
-        <div className="mb-8">
+        {/* Recém publicados - Carousel */}
+        <div className="section showcase-1">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Melhores Ofertas</h2>
+            <h2 className="section-title">Produtos publicados recentemente:</h2>
             <Button
               variant="link"
               size="sm"
@@ -131,7 +131,7 @@ const ProductsPage = () => {
               {bestOffers.map((product) => (
                 <CarouselItem
                   key={product.id}
-                  className="pl-2 md:pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                  className="pl-2 md:pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/5"
                 >
                   <ProductCard {...product} />
                 </CarouselItem>
@@ -145,7 +145,7 @@ const ProductsPage = () => {
         </div>
 
         {/* All Products - Limited to 3 rows initially */}
-        <div className="mb-8">
+        <div className="section">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Todos os Produtos</h2>
           </div>
@@ -172,7 +172,7 @@ const ProductsPage = () => {
         </div>
 
         {/* Community Comments - Carousel */}
-        <div className="mb-8">
+        <div className="section">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Comentários da comunidade</h2>
           </div>

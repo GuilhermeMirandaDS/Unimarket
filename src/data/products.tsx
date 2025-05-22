@@ -9,7 +9,8 @@ const products = [
     category: 2,
     seller: {
       name: "Carlos Silva",
-      avatar: "https://i.pravatar.cc/100?img=1"
+      avatar: "https://i.pravatar.cc/100?img=1",
+      graduation: "Direito"
     }
   },
   {
@@ -21,7 +22,8 @@ const products = [
     category: 6,
     seller: {
       name: "Tech Store",
-      avatar: "https://i.pravatar.cc/100?img=2"
+      avatar: "https://i.pravatar.cc/100?img=2",
+      graduation: "Direito"
     }
   },
   {
@@ -33,7 +35,8 @@ const products = [
     category: 1,
     seller: {
       name: "Ana Paula",
-      avatar: "https://i.pravatar.cc/100?img=3"
+      avatar: "https://i.pravatar.cc/100?img=3",
+      graduation: "Direito"
     }
   },
   {
@@ -45,19 +48,21 @@ const products = [
     category: 5,
     seller: {
       name: "Maria Souza",
-      avatar: "https://i.pravatar.cc/100?img=4"
+      avatar: "https://i.pravatar.cc/100?img=4",
+      graduation: "Direito"
     }
   },
   {
     id: 5,
     name: "Caneca Edição Limitada Engenharia",
     price: 19.00,
-    image: "https://images.unsplash.com/photo-1534231175-4221236c02ba?q=80&w=400&auto=format",
+    image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-ltcfkqs7mjqk93",
     rating: 4.9,
     category: 5,
     seller: {
       name: "Studio Design",
-      avatar: "https://i.pravatar.cc/100?img=5"
+      avatar: "https://i.pravatar.cc/100?img=5",
+      graduation: "Direito"
     }
   },
   {
@@ -69,7 +74,8 @@ const products = [
     category: 2,
     seller: {
       name: "Doces Uni",
-      avatar: "https://i.pravatar.cc/100?img=6"
+      avatar: "https://i.pravatar.cc/100?img=6",
+      graduation: "Direito"
     }
   },
   {
@@ -81,7 +87,8 @@ const products = [
     category: 2,
     seller: {
       name: "Nana Doces",
-      avatar: "https://i.pravatar.cc/100?img=7"
+      avatar: "https://i.pravatar.cc/100?img=7",
+      graduation: "Direito"
     }
   },
   {
@@ -93,7 +100,8 @@ const products = [
     category: 2,
     seller: {
       name: "Padaria Uni",
-      avatar: "https://i.pravatar.cc/100?img=8"
+      avatar: "https://i.pravatar.cc/100?img=8",
+      graduation: "Direito"
     }
   },
   {
@@ -105,7 +113,8 @@ const products = [
     category: 6,
     seller: {
       name: "Tech Connect",
-      avatar: "https://i.pravatar.cc/100?img=9"
+      avatar: "https://i.pravatar.cc/100?img=9",
+      graduation: "Direito"
     }
   },
   {
@@ -117,7 +126,8 @@ const products = [
     category: 7,
     seller: {
       name: "Livraria do Estudante",
-      avatar: "https://i.pravatar.cc/100?img=10"
+      avatar: "https://i.pravatar.cc/100?img=10",
+      graduation: "Direito"
     }
   },
   {
@@ -129,7 +139,8 @@ const products = [
     category: 3,
     seller: {
       name: "Restaurante Universitário",
-      avatar: "https://i.pravatar.cc/100?img=11"
+      avatar: "https://i.pravatar.cc/100?img=11",
+      graduation: "Direito"
     }
   },
   {
@@ -141,7 +152,8 @@ const products = [
     category: 3,
     seller: {
       name: "Saúde na Mesa",
-      avatar: "https://i.pravatar.cc/100?img=12"
+      avatar: "https://i.pravatar.cc/100?img=12",
+      graduation: "Direito"
     }
   }
 ];
