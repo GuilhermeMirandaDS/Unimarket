@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -64,6 +63,8 @@ const ProductDetailPage = () => {
           
           <div>
             <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+
+            <h3 className="product-desc">{product.desc}</h3>
             
             <div className="mb-4 flex items-center">
               <StarRating rating={product.rating} size="lg" />

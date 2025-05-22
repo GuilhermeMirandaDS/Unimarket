@@ -13,6 +13,7 @@ export interface ProductProps {
   image: string;
   rating: number;
   category: number;
+  desc: string;
   seller: {
     name: string;
     avatar: string;
