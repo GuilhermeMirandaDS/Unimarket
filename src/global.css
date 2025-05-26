@@ -10,6 +10,10 @@ header .container{
 }
 
 
+.color-blue{
+    color: #007bff;
+}
+
 
 
 .menu-tab{
@@ -102,7 +106,7 @@ header .container{
 
 
 .section{
-    margin-bottom: 48px;
+    margin-bottom: 50px;
 }
 .section-title{
     font-size: 32px;
@@ -188,8 +192,12 @@ header .container{
     align-items: start;
     justify-content: center;
 }
+.img-container{
+    display: flex;
+    justify-content: end;
+}
 .product-page-image{
-    width: 800px;
+    width: 600px;
     height: auto;
 }
 
@@ -223,4 +231,12 @@ header .container{
 }
 .btn-cart{
     background-color: #E89700 !important;
+}
+
+.title-sugestion{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 32px;
 }

@@ -9,6 +9,7 @@ import { ShoppingCart, ArrowLeft } from 'lucide-react';
 import products from '@/data/products';
 import { ProductProps } from '@/components/ProductCard';
 import { useCart } from '@/hooks/use-cart';
+import ProductCard from "@/components/ProductCard";
 import {
   Carousel,
   CarouselContent,
@@ -22,6 +23,9 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductProps | null>(null);
   const { addToCart } = useCart();
+
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [bestOffers, setBestOffers] = useState(products.slice(0, 6));
   
   useEffect(() => {
     const foundProduct = products.find(p => p.id.toString() === productId);
@@ -29,6 +33,14 @@ const ProductDetailPage = () => {
       setProduct(foundProduct);
     }
   }, [productId]);
+
+  const handleCategorySelect = (categoryId: number) => {
+    if (selectedCategory === categoryId) {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(categoryId);
+    }
+  };
   
   if (!product) {
     return (
@@ -60,8 +72,8 @@ const ProductDetailPage = () => {
           <ArrowLeft className="h-4 w-4 mr-2" /> Voltar para produtos
         </Button>
         
-        <div className="product-container grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+        <div className="product-container section grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="img-container bg-white rounded-lg overflow-hidden shadow-sm">
             <img 
               src={product.image} 
               alt={product.name} 
@@ -143,7 +155,8 @@ const ProductDetailPage = () => {
             ))}
           </div>
         </div> */}
-        <Carousel className="w-full mt-6" opts={{ loop: true }}>
+        <Carousel className="w-full section mt-6" opts={{ loop: true }}>
+        <h2 className="title-sugestion">Avaliações:</h2>
             <CarouselContent className="-ml-2 md:-ml-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <CarouselItem
@@ -168,10 +181,6 @@ const ProductDetailPage = () => {
                         </p>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600">
-                      "Os produtos do Unimarket têm me ajudado muito na rotina
-                      universitária. Recomendo!"
-                    </p>
                   </div>
                 </CarouselItem>
               ))}
@@ -181,6 +190,37 @@ const ProductDetailPage = () => {
               <CarouselNext className="relative static ml-2 translate-y-0" />
             </div>
           </Carousel>
+
+        {/* Relacionados - Carousel */}
+        <div className="section showcase-1">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="title-sugestion">Você também pode <p className='color-blue'>gostar</p>:</h2>
+            <Button
+              variant="link"
+              size="sm"
+              onClick={() => setSelectedCategory(null)}
+            >
+              Ver todos
+            </Button>
+          </div>
+
+          <Carousel className="w-full" opts={{ loop: true }}>
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {bestOffers.map((product) => (
+                <CarouselItem
+                  key={product.id}
+                  className="pl-2 md:pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/5"
+                >
+                  <ProductCard {...product} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center mt-4">
+              <CarouselPrevious className="relative static mr-2 translate-y-0" />
+              <CarouselNext className="relative static ml-2 translate-y-0" />
+            </div>
+          </Carousel>
+        </div>
       </main>
     </div>
   );

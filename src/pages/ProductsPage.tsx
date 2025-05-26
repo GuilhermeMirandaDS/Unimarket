@@ -144,7 +144,7 @@ const ProductsPage = () => {
           </Carousel>
         </div>
 
-        {/* All Products - Limited to 3 rows initially */}
+        {/* Todos os produtos */}
         <div className="section">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Todos os Produtos</h2>
@@ -171,7 +171,7 @@ const ProductsPage = () => {
           )}
         </div>
 
-        {/* Community Comments - Carousel */}
+        {/* Comentários - Carousel */}
         <div className="section">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Comentários da comunidade</h2>

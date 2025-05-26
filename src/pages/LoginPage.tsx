@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { login, register } from '@/back/api';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,27 +15,37 @@ const LoginPage = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    const authFunc = isLogin ? login : register;
+    const result = await authFunc(email, password);
     
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      if (isLogin) {
-        toast({
-          title: "Login realizado com sucesso!",
-          description: "Bem-vindo(a) de volta ao Unimarket.",
-        });
-      } else {
-        toast({
-          title: "Cadastro realizado com sucesso!",
-          description: "Sua conta foi criada. Bem-vindo(a) ao Unimarket!",
-        });
+    setIsLoading(false);
+
+    if (result.token || result.user) {
+      if (result.token) {
+        sessionStorage.setItem('token', result.token);
       }
-      
+
+      toast({
+        title: isLogin
+          ? "Login realizado com sucesso!"
+          : "Cadastro realizado com sucesso!",
+        description: isLogin
+          ? "Bem-vindo(a) de volta ao Unimarket."
+          : "Sua conta foi criada com sucesso!",
+      });
+
       navigate('/products');
-    }, 1500);
+    } else {
+      toast({
+        title: "Erro",
+        description: result.error || "Falha na autenticação.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
