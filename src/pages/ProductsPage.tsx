@@ -99,7 +99,6 @@ const ProductsPage = () => {
 
         {/* Categorias */}
         <div className="section">
-          {/* <h2 className="text-xl font-bold mb-4">Categorias</h2> */}
           <div className="grid grid-cols-4 md:grid-cols-7 gap-3">
             {categories.map((category) => (
               <CategoryButton

@@ -12,6 +12,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./hooks/use-cart";
 import "./global.css";
+import UserPage from "./pages/UserPage";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App: React.FC = () => {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/" element={<Navigate to="/products" replace />} />
               <Route path="*" element={<NotFound />} />
+              <Route path="/user" element={<UserPage />}/>
             </Routes>
           </BrowserRouter>
         </TooltipProvider>

@@ -240,3 +240,55 @@ header .container{
     gap: 6px;
     font-size: 32px;
 }
+
+
+
+
+/* Página do Usuário */
+
+
+.user-welcome{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.presentation{
+    display: flex;
+    align-items: end;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 60px;
+}
+.presentation h1{
+    font-size: 48px;
+    font-weight: 700;
+}
+.presentation .add-btn{
+    background-color: #007bff;
+    padding: 12px 24px !important;
+    color: white;
+    font-size: 20px;
+    height: 68px;
+}
+.presentation .usuario-nome{
+    color: #007bff;
+}
+.presentation .welcome-frase{
+    color: grey;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.my-products{
+    padding: 20px;
+    border: solid 1px #EAEAEA;
+    border-radius: 24px;
+}
+.my-products h2, .reviews h2{
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.my-products .grid{
+    gap: 32px;
+}
