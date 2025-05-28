@@ -10,27 +10,21 @@ interface ModalCadastroProps {
             className="modal-overlay"
             style={{
                 position: 'fixed',
-                top: 0, left: 0, right: 0, bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
+                top: '10%', left: '33.333%', right: '33.333%', bottom: 0,
+                backgroundColor: 'rgb(255, 255, 255)',
+                boxShadow: '0px 0px 4000px rgba(0,0,0,0.2)',
+                borderRadius: '24px',
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 zIndex: 1000,
+                height: '89%',
+                width: '33.333%',
             }}
             onClick={onClose}>
-            <div
-                className="modal-content"
-                style={{
-                backgroundColor: '#fff',
-                padding: 20,
-                borderRadius: 8,
-                minWidth: '300px',
-                position: 'relative',
-                }}
-                onClick={e => e.stopPropagation()} // impedir fechar clicando dentro
-            ></div>
             <div className="add-product">
-                <h2>Adicionar produto:</h2>
+                <h2>Adicionar produto</h2>
                 <form action="submit" method="post">
                     <div className="new-prod-name">
                         <span>Nome:</span>
@@ -42,11 +36,11 @@ interface ModalCadastroProps {
                     </div>
                     <div className="new-prod-front-img">
                         <span>Imagem principal do produto:</span>
-                        <input type="file" name="front-img" id="prod-front-img" />
+                        <input className="input-image" type="file" name="front-img" id="prod-front-img" />
                     </div>
                     <div className="new-product-imgs">
                         <span>Outras imagens do produto:</span>
-                        <input type="file" name="prod-imgs" id="prod-imgs" />
+                        <input className="input-image" type="file" name="prod-imgs" id="prod-imgs" />
                     </div>
                     <div className="new-prod-category">
                         <span>Categoria:</span>
@@ -64,7 +58,7 @@ interface ModalCadastroProps {
                     </div>
                     <div className="new-prod-stock">
                         <span>Estoque</span>
-                        <input type="number" placeholder='Digite a quantidade em estoque do seu novo produto'/>
+                        <input type="number" placeholder='Digite a quantidade em estoque'/>
                     </div>
                     <div className="new-prod-tags">
                         <span>Palavras-Chave</span>
