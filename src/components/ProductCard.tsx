@@ -9,26 +9,26 @@ import { fetchUser } from '@/back/api';
 
 export interface ProductProps {
   id: number;
-  name: string;
+  nome: string;
+  descricao: string;
+  imagemUrl: string;
+  categoria: number;
   price: number;
-  image: string;
-  rating: number;
-  category: number;
-  desc: string;
-  seller: {
-    name: string;
-    avatar: string;
-    graduation: string;
-  };
+  stock: number;
+  userId: number;
+  tags: string;
 }
 
 const ProductCard = ({
   id,
-  name,
+  nome,
+  descricao,
+  imagemUrl,
+  categoria,
   price,
-  image,
-  rating,
-  seller,
+  stock,
+  userId,
+  tags,
 }: ProductProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
@@ -43,8 +43,8 @@ const ProductCard = ({
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addToCart({ id, name, price, image, rating, seller, category: 0 });
-    toast.success(`${name} adicionado ao carrinho!`);
+    addToCart({ id, nome, descricao, imagemUrl, price, stock, userId, tags, categoria });
+    toast.success(`${nome} adicionado ao carrinho!`);
   };
 
   const handleCardClick = () => {
@@ -81,8 +81,8 @@ const ProductCard = ({
     >
       <div className="relative aspect-square overflow-hidden">
         <img
-          src={image}
-          alt={name}
+          src={imagemUrl}
+          alt={nome}
           className={cn(
             "w-full h-full object-cover transition-transform duration-300",
             isHovered && "scale-105"
@@ -91,8 +91,8 @@ const ProductCard = ({
       </div>
 
       <div className="p-4">
-        <h3 className="product-name">{name}</h3>
-        <div className="rating flex items-center space-x-1">
+        <h3 className="product-name">{nome}</h3>
+        {/* <div className="rating flex items-center space-x-1">
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
@@ -109,18 +109,18 @@ const ProductCard = ({
           <span className="text-xs text-gray-500 ml-1">
             ({(rating * 10).toFixed(0)})
           </span>
-        </div>
+        </div> */}
 
         <span className="seller-title">Vendedor(a):</span>
         <div className="seller flex items-center">
           <img
-            src={seller.avatar}
-            alt={seller.name}
+            src={user.avatar}
+            alt={user.name}
             className="seller-img"
           />
           <div className="seller-info">
-            <span className="seller-name">{seller.name}</span>
-            <span className="seller-grad">{seller.graduation}</span>
+            <span className="seller-name">{user.name}</span>
+            <span className="seller-grad">{user.tag}</span>
           </div>
         </div>
 
