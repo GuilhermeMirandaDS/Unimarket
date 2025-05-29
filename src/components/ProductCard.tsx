@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
 import { useNavigate } from "react-router-dom";
-import { fetchUser } from '@/back/api';
+import { fetchUser, getAllProducts } from '@/back/api';
 
 export interface ProductProps {
   id: number;
@@ -33,13 +33,7 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
   const navigate = useNavigate();
-  type UserType = {
-    name: string;
-    tag: string;
-    avatar: string;
-  };
-  const [user, setUser] = useState<UserType | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -50,27 +44,7 @@ const ProductCard = ({
   const handleCardClick = () => {
     navigate(`/products/${id}`);
   };
-
-  useEffect(() => {
-      const token = localStorage.getItem("token");
-  
-      if (!token) {
-        setIsAuthenticated(false);
-        navigate("/login");
-        return;
-      }
-  
-      setIsAuthenticated(true);
-  
-      fetchUser(token)
-        .then(setUser)
-        .catch((err) => {
-          console.error("Erro ao buscar usuário:", err);
-          setIsAuthenticated(false);
-          navigate("/login");
-        });
-    }, []);
-  
+ 
 
   return (
     <div
@@ -111,7 +85,7 @@ const ProductCard = ({
           </span>
         </div> */}
 
-        <span className="seller-title">Vendedor(a):</span>
+        {/*<span className="seller-title">Vendedor(a):</span>
         <div className="seller flex items-center">
           <img
             src={user.avatar}
@@ -122,7 +96,7 @@ const ProductCard = ({
             <span className="seller-name">{user.name}</span>
             <span className="seller-grad">{user.tag}</span>
           </div>
-        </div>
+        </div>*/}
 
 
         <div className="buy-form">

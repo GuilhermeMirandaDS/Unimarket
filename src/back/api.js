@@ -32,33 +32,25 @@ export async function fetchUser(token) {
   return res.json();
 }
 
-export async function fetchProduct(token) {
-  const res = await fetch(`${API_URL}/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`
+export async function getAllProducts(token) {
+  try {
+    const res = await fetch(`${API_URL}/productList`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return { ok: false, error: errorData.message || 'Erro ao buscar produtos' };
     }
-  });
 
-  if (!res.ok) throw new Error('Erro ao buscar usuário');
-
-  return res.json();
-}
-
-export const getAllProducts = async () => {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch(`${API_URL}/products`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-
-  if (!res.ok) {
-    throw new Error("Erro ao buscar produtos");
+    const data = await res.json();
+    return { ok: true, data };
+  } catch (error) {
+    return { ok: false, error: error.message || 'Erro de conexão' };
   }
-
-  return res.json();
-};
+}
 
 
 export async function addProduct(productData, token) {
