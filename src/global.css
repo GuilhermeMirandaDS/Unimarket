@@ -354,10 +354,13 @@ header .container{
 .my-products .grid{
     gap: 32px;
 }
+.userpage-cards .seller, .userpage-cards .seller-title{
+    display: none;
+}
 
 
 
-/* Modal Add Produto */
+/* Modal Add Product */
 
 .add-product{
     height: 100%;

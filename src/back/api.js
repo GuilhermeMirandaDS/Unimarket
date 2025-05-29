@@ -20,10 +20,33 @@ export async function register(userData) {
   return data;
 }
 
-export async function getProducts() {
-  const res = await fetch(`${API_URL}/products`);
+export async function fetchUser(token) {
+  const res = await fetch(`${API_URL}/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) throw new Error('Erro ao buscar usuário');
+
   return res.json();
 }
+
+export const getAllProducts = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API_URL}/products`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error("Erro ao buscar produtos");
+  }
+
+  return res.json();
+};
 
 export async function addProduct(productData, token) {
   try{

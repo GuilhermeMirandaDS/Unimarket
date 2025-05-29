@@ -5,25 +5,43 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
-import users from '@/data/users';
+import { fetchUser } from '@/back/api';
+
 
 const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState("");
   const { cart } = useCart();
   const navigate = useNavigate();
-  const [user, setUser] = useState(users[0]);
+    type UserType = {
+    name: string;
+    tag: string;
+    avatar: string;
+  };
+  const [user, setUser] = useState<UserType | null>(null);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    } else{
+
+    if (!token) {
+      setIsAuthenticated(false);
       navigate("/login");
+      return;
     }
+
+    setIsAuthenticated(true);
+
+    fetchUser(token)
+      .then(setUser)
+      .catch((err) => {
+        console.error("Erro ao buscar usuário:", err);
+        setIsAuthenticated(false);
+        navigate("/login");
+      });
   }, []);
+
 
   function logOut() {
     localStorage.removeItem("token");
@@ -100,10 +118,10 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
             </Button>
           ) : (
             <Button className="user-btn first-level-user" variant="ghost" size="icon">
-                <img className="user-pfp" src={user.avatar} alt="UserImg" />
+                <img className="user-pfp" src={user?.avatar} alt="UserImg" />
                 <div className="user-info-header">
-                  <span className="user-name-header">{user.username}</span>
-                  <p className="user-tag-header">{user.tag}</p>
+                  <span className="user-name-header">{user?.name}</span>
+                  <p className="user-tag-header">{user?.tag}</p>
                 </div>
                 <ul className="second-level-user">
                   <li className="menu-subitem">

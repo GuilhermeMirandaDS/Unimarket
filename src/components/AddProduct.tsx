@@ -13,8 +13,8 @@ interface ModalCadastroProps {
     const [descricao, setDescricao] = useState('');
     const [imagemUrl, setImagemUrl] = useState('');
     const [categoria, setCategoria] = useState('');
-    const [preco, setPreco] = useState('');
-    const [estoque, setEstoque] = useState('');
+    const [price, setPreco] = useState('');
+    const [stock, setEstoque] = useState('');
     const [tags, setTags] = useState('');
 
     const token = localStorage.getItem('token');
@@ -40,8 +40,8 @@ interface ModalCadastroProps {
             descricao,
             imagemUrl,
             categoria: Number(categoria),
-            preco: Number(preco),
-            estoque: Number(estoque),
+            price: Number(price),
+            stock: Number(stock),
             userId,
             tags,
         };
@@ -103,11 +103,11 @@ interface ModalCadastroProps {
                     </div>
                     <div className="new-prod-price">
                         <span>Preço:</span>
-                        <input type="number" placeholder='Digite o valor do seu novo produto' value={preco} onChange={(e) => setPreco(e.target.value)}/>
+                        <input type="number" placeholder='Digite o valor do seu novo produto' value={price} onChange={(e) => setPreco(e.target.value)}/>
                     </div>
                     <div className="new-prod-stock">
                         <span>Estoque</span>
-                        <input type="number" placeholder='Digite a quantidade em estoque' value={estoque} onChange={(e) => setEstoque(e.target.value)}/>
+                        <input type="number" placeholder='Digite a quantidade em estoque' value={stock} onChange={(e) => setEstoque(e.target.value)}/>
                     </div>
                     <div className="new-prod-tags">
                         <span>Palavras-Chave</span>

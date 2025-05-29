@@ -5,9 +5,8 @@ import StarRating from '@/components/StarRating';
 import { Button } from '@/components/ui/button';
 import ProductCard from "@/components/ProductCard";
 import { ProductProps } from '@/components/ProductCard';
-import { ArrowLeft } from 'lucide-react';
+import { fetchUser } from '@/back/api';
 import products from '@/data/products';
-import users from '@/data/users';
 import ModalCadastro from '@/components/AddProduct';
 import {
     Carousel,
@@ -21,15 +20,34 @@ const userPage = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState<ProductProps | null>(null);
-    const [user, setUser] = useState(users[0]);
+    const [user, setUser] = useState(null);
     const [filteredProducts, setFilteredProducts] = useState(products);
     const [displayCount, setDisplayCount] = useState(15);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const foundProduct = products.find(p => p.id.toString() === productId);
         if (foundProduct) {
           setProduct(foundProduct);
         }
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+        setIsAuthenticated(false);
+        navigate("/login");
+        return;
+        }
+
+        setIsAuthenticated(true);
+
+        fetchUser(token)
+        .then(setUser)
+        .catch((err) => {
+            console.error("Erro ao buscar usuário:", err);
+            setIsAuthenticated(false);
+            navigate("/login");
+        });
     }, [productId]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,8 +64,8 @@ const userPage = () => {
                     <div className="text-welcome">
                         <div className="user-welcome">
                             <h1>Olá,</h1>
-                            <a href={user.avatar}>
-                                <h1 className='usuario-nome'>{user.username}</h1>
+                            <a href={user?.avatar}>
+                                <h1 className='usuario-nome'>{user?.name}</h1>
                             </a>
                             <h1>!</h1>
                         </div>
@@ -64,7 +82,7 @@ const userPage = () => {
 
                 <div className="my-products section">
                     <h2>Meus produtos anunciados:</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                    <div className="userpage-cards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                         {filteredProducts.slice(0, displayCount).map((product) => (
                         <ProductCard key={product.id} {...product} />
                         ))}
