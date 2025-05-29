@@ -1,21 +1,23 @@
 const API_URL = 'http://localhost:3000/api';
 
-export async function login(username, password) {
+export async function login(email, password) {
   const res = await fetch(`${API_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   });
   return res.json();
 }
 
-export async function register(username, password) {
+export async function register(userData) {
   const res = await fetch(`${API_URL}/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(userData),
   });
-  return res.json();
+
+  const data = await res.json();
+  return data;
 }
 
 export async function getProducts() {
@@ -23,14 +25,27 @@ export async function getProducts() {
   return res.json();
 }
 
-export async function addProduct(product, token) {
-  const res = await fetch(`${API_URL}/products`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(product)
-  });
+export async function addProduct(productData, token) {
+  try{
+    const res = await fetch(`${API_URL}/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(productData),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return { ok: false, error: errorData.message || 'Erro no servidor' };
+    }
+
+    const data = await res.json();
+    return { ok: true, data };
+  }catch{
+    return { ok: false, error: error.message || 'Erro de conexão' };
+  }
+  
   return res.json();
 }

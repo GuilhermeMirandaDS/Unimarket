@@ -1,17 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, User, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
+import users from '@/data/users';
 
 const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState("");
   const { cart } = useCart();
   const navigate = useNavigate();
+  const [user, setUser] = useState(users[0]);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else{
+      navigate("/login");
+    }
+  }, []);
+
+  function logOut() {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -74,12 +91,39 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
           </div>
 
           <div className="flex items-center gap-3">
+          {!isAuthenticated ? (
             <Button variant="ghost" size="icon" asChild>
               <Link to="/login">
                 <User className="h-5 w-5" />
                 <span className="sr-only">Perfil</span>
               </Link>
             </Button>
+          ) : (
+            <Button className="user-btn first-level-user" variant="ghost" size="icon">
+                <img className="user-pfp" src={user.avatar} alt="UserImg" />
+                <div className="user-info-header">
+                  <span className="user-name-header">{user.username}</span>
+                  <p className="user-tag-header">{user.tag}</p>
+                </div>
+                <ul className="second-level-user">
+                  <li className="menu-subitem">
+                    <Link to="/user">
+                      Perfil
+                    </Link>
+                    </li>
+                  <li className="menu-subitem">
+                    <Link to="/user">
+                      Meus Anúncios
+                    </Link>
+                  </li>
+                  <li className="menu-subitem">
+                    <button onClick={logOut}>
+                      Sair
+                    </button>
+                    </li>
+                </ul>
+            </Button>
+          )}
 
             <Button variant="ghost" size="icon" className="relative" asChild>
               <Link to="/cart">

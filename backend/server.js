@@ -24,7 +24,7 @@ app.post('/api/register', (req, res) => {
   res.json({ message: 'Usuário registrado com sucesso!' });
 });
 
-sequelize.sync().then(() => {
+sequelize.sync({force: true}).then(() => {
   console.log('Banco sincronizado');
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Servidor rodando na porta ${process.env.PORT || 3000}`);

@@ -1,32 +1,46 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { login, register } from '@/back/api';
+import { Select } from '@radix-ui/react-select';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
+  const [tag, setTag] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("0");
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate("/products");
+    }
+  }, [navigate]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(e.target.value);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     const authFunc = isLogin ? login : register;
-    const result = await authFunc(email, password);
+    const result = isLogin ? await login(email, password) : await register({email, password, name, tag: Number(selectedOption) });
     
     setIsLoading(false);
 
     if (result.token || result.user) {
       if (result.token) {
-        sessionStorage.setItem('token', result.token);
+        localStorage.setItem('token', result.token);
       }
 
       toast({
@@ -68,7 +82,7 @@ const LoginPage = () => {
             {!isLogin && (
               <div className="space-y-2">
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Nome completo
+                  Nome de Usuário
                 </label>
                 <Input
                   id="name"
@@ -78,9 +92,28 @@ const LoginPage = () => {
                   placeholder="Digite seu nome completo"
                   required={!isLogin}
                 />
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Sou
+                  </label>
+                  <select
+                    id="tag"
+                    value={selectedOption}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value={0}>Selecionar</option>
+                    <option value={1}>Vendedor</option>
+                    <option value={2}>Aluno</option>
+                    <option value={3}>Funcionário</option>
+                  </select>
+                </div>
               </div>
+
+
             )}
             
+
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
