@@ -11,6 +11,7 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, 'secreto123');
+    console.log("Token decodificado:", decoded);
     req.user = decoded;
     next();
   } catch (err) {

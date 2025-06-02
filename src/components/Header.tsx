@@ -5,26 +5,21 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
-import { fetchUser } from '@/back/api';
+import { getUserInfo } from "@/data/userInfo";
+
 
 
 const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   const isMobile = useIsMobile();
+  const user = getUserInfo();
   const [searchQuery, setSearchQuery] = useState("");
   const { cart } = useCart();
   const navigate = useNavigate();
-    type UserType = {
-    name: string;
-    tag: string;
-    avatar: string;
-  };
-  const [user, setUser] = useState<UserType | null>(null);
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
+    const token = localStorage.getItem('token');
+    
     if (!token) {
       setIsAuthenticated(false);
       navigate("/login");
@@ -32,14 +27,6 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
     }
 
     setIsAuthenticated(true);
-
-    fetchUser(token)
-      .then(setUser)
-      .catch((err) => {
-        console.error("Erro ao buscar usuário:", err);
-        setIsAuthenticated(false);
-        navigate("/login");
-      });
   }, []);
 
 
@@ -47,6 +34,8 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
     localStorage.removeItem("token");
     navigate("/login");
   }
+
+
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -70,7 +59,7 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
             <div className="container md:flex mx-auto px-4 py-3" style={{gap: "20px"}}>
               <a className="menu-tab" href="/">Página Inicial</a>
               <div className="menu-tab first-level md:flex items-end px-2">
-                Produtos
+                Categorias
                 <svg width="20px" height="20px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" >
 
                 <path d="M0 0h48v48H0z" fill="none"/>
@@ -118,7 +107,7 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
             </Button>
           ) : (
             <Button className="user-btn first-level-user" variant="ghost" size="icon">
-                <img className="user-pfp" src={user?.avatar} alt="UserImg" />
+                <User className="h-5 w-5" />
                 <div className="user-info-header">
                   <span className="user-name-header">{user?.name}</span>
                   <p className="user-tag-header">{user?.tag}</p>

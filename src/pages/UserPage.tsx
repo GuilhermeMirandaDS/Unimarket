@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import Header from '@/components/Header';
+import { getAllProducts } from "@/back/api";
 import StarRating from '@/components/StarRating';
+import ProductCard, { ProductProps } from "@/components/ProductCard";
+import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
-import ProductCard from "@/components/ProductCard";
-import { ProductProps } from '@/components/ProductCard';
-import { fetchUser } from '@/back/api';
-import products from '@/data/products';
+import { getUserInfo } from "@/data/userInfo";
 import ModalCadastro from '@/components/AddProduct';
 import {
     Carousel,
@@ -16,41 +15,46 @@ import {
     CarouselPrevious,
   } from "@/components/ui/carousel";
 
-const userPage = () => {
-    const { productId } = useParams();
+const UserPage = () => {
     const navigate = useNavigate();
-    const [product, setProduct] = useState<ProductProps | null>(null);
-    const [user, setUser] = useState(null);
-    const [filteredProducts, setFilteredProducts] = useState(products);
+    const [products, setProducts] = useState<ProductProps[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const user = getUserInfo();
     const [displayCount, setDisplayCount] = useState(15);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const foundProduct = products.find(p => p.id.toString() === productId);
-        if (foundProduct) {
-          setProduct(foundProduct);
-        }
-
         const token = localStorage.getItem("token");
 
         if (!token) {
-        setIsAuthenticated(false);
-        navigate("/login");
-        return;
+            setIsAuthenticated(false);
+            navigate("/login");
+            return;
         }
 
         setIsAuthenticated(true);
 
-        fetchUser(token)
-        .then(setUser)
-        .catch((err) => {
-            console.error("Erro ao buscar usuário:", err);
-            setIsAuthenticated(false);
-            navigate("/login");
-        });
-    }, [productId]);
+        const fetchProducts = async () => {
+            const response = await getAllProducts();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+            if (response.ok) {
+                setProducts(response.data);
+            } else {
+                setError(response.error);
+            }
+
+            setLoading(false);
+        }
+
+        fetchProducts();
+    }, []);
+
+    if (loading) return <p>Carregando produtos...</p>;
+    if (error) return <p className="text-red-500">Erro: {error}</p>;
+
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
@@ -64,9 +68,7 @@ const userPage = () => {
                     <div className="text-welcome">
                         <div className="user-welcome">
                             <h1>Olá,</h1>
-                            <a href={user?.avatar}>
-                                <h1 className='usuario-nome'>{user?.name}</h1>
-                            </a>
+                            <h1 className='usuario-nome'>{user?.name}</h1>
                             <h1>!</h1>
                         </div>
                         <p className='welcome-frase'>Bem-vindo(a) ao perfil de vendedor</p>
@@ -83,8 +85,8 @@ const userPage = () => {
                 <div className="my-products section">
                     <h2>Meus produtos anunciados:</h2>
                     <div className="userpage-cards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                        {filteredProducts.slice(0, displayCount).map((product) => (
-                        <ProductCard key={product.id} {...product} />
+                        {products.map((product) => (
+                            <ProductCard key={product.id} {...product} />
                         ))}
                     </div>
                 </div>
@@ -133,4 +135,4 @@ const userPage = () => {
     );
 };
 
-export default userPage;
+export default UserPage;

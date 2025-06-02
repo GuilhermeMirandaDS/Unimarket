@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(401).json({ error: 'Senha incorreta' });
 
-    const token = jwt.sign({ id: user.id, email: user.email }, 'secreto123', {
+    const token = jwt.sign({ id: user.id, email: user.email, name: user.name, tag: user.tag }, 'secreto123', {
       expiresIn: '1h'
     });
 
@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
-      attributes: ['id', 'email', 'name', 'tag']
+      attributes: ['id', 'name', 'tag']
     });
 
     if (!user) {

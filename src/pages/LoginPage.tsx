@@ -102,7 +102,6 @@ const LoginPage = () => {
                     onChange={handleChange}
                     required
                   >
-                    <option value={0}>Selecionar</option>
                     <option value={1}>Vendedor</option>
                     <option value={2}>Aluno</option>
                     <option value={3}>Funcionário</option>

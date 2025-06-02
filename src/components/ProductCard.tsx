@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Star, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
 import { useNavigate } from "react-router-dom";
-import { fetchUser, getAllProducts } from '@/back/api';
+import { getAllProducts } from '@/back/api';
 
 export interface ProductProps {
   id: number;

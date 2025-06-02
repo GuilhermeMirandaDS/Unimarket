@@ -21,25 +21,29 @@ export async function register(userData) {
 }
 
 export async function fetchUser(token) {
+  console.log("Token enviado:", token);
+
   const res = await fetch(`${API_URL}/me`, {
+    method: 'GET',
     headers: {
-      Authorization: `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
   });
 
-  if (!res.ok) throw new Error('Erro ao buscar usuário');
+  if (!res.ok) {
+    const text = await res.text(); // Isso mostra o erro real do servidor
+    console.error("Erro bruto do backend:", text);
+    throw new Error('Erro ao buscar usuário');
+  }
 
   return res.json();
 }
 
-export async function getAllProducts(token) {
+export async function getAllProducts() {
   try {
-    const res = await fetch(`${API_URL}/productList`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
+    const res = await fetch(`${API_URL}/productList`);
+    
     if (!res.ok) {
       const errorData = await res.json();
       return { ok: false, error: errorData.message || 'Erro ao buscar produtos' };
