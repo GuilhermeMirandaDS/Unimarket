@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
+import { getAllProducts } from "@/back/api";
 import StarRating from '@/components/StarRating';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-
-import { ShoppingCart, ArrowLeft } from 'lucide-react';
-import products from '@/data/products';
-import { ProductProps } from '@/components/ProductCard';
+import { ArrowLeft } from 'lucide-react';
+import ProductCard, { ProductProps } from "@/components/ProductCard";
 import { useCart } from '@/hooks/use-cart';
-import ProductCard from "@/components/ProductCard";
 import {
   Carousel,
   CarouselContent,
@@ -19,30 +17,33 @@ import {
 } from "@/components/ui/carousel";
 
 const ProductDetailPage = () => {
-  const { productId } = useParams();
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const navigate = useNavigate();
-  const [product, setProduct] = useState<ProductProps | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { addToCart } = useCart();
-
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [bestOffers, setBestOffers] = useState(products.slice(0, 6));
   
   useEffect(() => {
-    const foundProduct = products.find(p => p.id.toString() === productId);
-    if (foundProduct) {
-      setProduct(foundProduct);
-    }
-  }, [productId]);
+    const fetchProducts = async () => {
+        const response = await getAllProducts();
 
-  const handleCategorySelect = (categoryId: number) => {
-    if (selectedCategory === categoryId) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(categoryId);
+        if (response.ok) {
+            setProducts(response.data);
+        } else {
+            setError(response.error);
+        }
+
+        setLoading(false);
     }
-  };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return <p>Carregando produtos...</p>;
+  if (error) return <p className="text-red-500">Erro: {error}</p>;
   
-  if (!product) {
+  if (!products) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
@@ -55,8 +56,8 @@ const ProductDetailPage = () => {
   }
   
   const handleAddToCart = () => {
-    addToCart(product);
-    toast.success(`${product.name} adicionado ao carrinho!`);
+    addToCart(products);
+    toast.success(`${products.name} adicionado ao carrinho!`);
   };
   
   return (
@@ -75,7 +76,7 @@ const ProductDetailPage = () => {
         <div className="product-container section grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="img-container bg-white rounded-lg overflow-hidden shadow-sm">
             <img 
-              src={product.image} 
+              src={imagemUrl} 
               alt={product.name} 
               className="product-page-image rounded-lg object-cover"
             />

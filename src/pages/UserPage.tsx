@@ -21,7 +21,6 @@ const UserPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const user = getUserInfo();
-    const [displayCount, setDisplayCount] = useState(15);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,6 +57,7 @@ const UserPage = () => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
+    console.log(products);
     
     return (
         <div className="min-h-screen bg-gray-50">
@@ -85,7 +85,9 @@ const UserPage = () => {
                 <div className="my-products section">
                     <h2>Meus produtos anunciados:</h2>
                     <div className="userpage-cards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                        {products.map((product) => (
+                        {products
+                            .filter(product => product.userId === user?.id)
+                            .map((product) => (
                             <ProductCard key={product.id} {...product} />
                         ))}
                     </div>

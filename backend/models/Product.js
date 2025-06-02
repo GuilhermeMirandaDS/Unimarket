@@ -6,7 +6,7 @@ const Category = require('./Category');
 const Product = sequelize.define('Product', {
   nome: { type: DataTypes.STRING, allowNull: false },
   descricao: { type: DataTypes.STRING, allowNull: true },
-  imageUrl: { type: DataTypes.STRING, allowNull: true },
+  imagemUrl: { type: DataTypes.STRING, allowNull: true },
   categoria: { type: DataTypes.INTEGER, references: {model: Category, key: 'id'}, allowNull: false },
   price: { type: DataTypes.FLOAT, allowNull: false },
   stock: { type: DataTypes.INTEGER, allowNull: false },
