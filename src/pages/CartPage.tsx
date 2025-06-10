@@ -6,17 +6,35 @@ import { Trash2, Plus, Minus } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
 import { useNavigate } from "react-router-dom";
+import { getAllProducts } from "@/back/api";
+import { ProductProps } from "@/components/ProductCard";
 
 const CartPage = () => {
-  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const [products, setProducts] = useState<ProductProps[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { cart, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await getAllProducts();
+      if (response.ok) {
+        setProducts(response.data);
+      } else {
+        setError(response.error);
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const calculateTotal = () => {
       return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     };
-
     setTotal(calculateTotal());
   }, [cart]);
 
@@ -33,12 +51,8 @@ const CartPage = () => {
 
         {cart.length === 0 ? (
           <div className="text-center py-12">
-            <h2 className="text-xl font-semibold mb-2">
-              Seu carrinho está vazio
-            </h2>
-            <p className="text-gray-500 mb-6">
-              Adicione produtos ao carrinho para continuar.
-            </p>
+            <h2 className="text-xl font-semibold mb-2">Seu carrinho está vazio</h2>
+            <p className="text-gray-500 mb-6">Adicione produtos ao carrinho para continuar.</p>
             <Button onClick={() => navigate("/products")}>
               Continuar comprando
             </Button>
@@ -46,75 +60,74 @@ const CartPage = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              {cart.map((item) => (
-                <Card key={item.id} className="mb-4">
-                  <CardContent className="p-4">
-                    <div className="flex gap-4">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-20 h-20 object-cover rounded"
-                      />
+              {cart.map((item) => {
+                const product = products.find((p) => p.id === item.id);
+                if (!product) return null;
 
-                      <div className="flex-1">
-                        <h3 className="font-medium">{item.name}</h3>
-                        <p className="text-sm text-gray-500 mb-2">
-                          Vendido por: {item.seller.name}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center border rounded">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 px-2"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  Math.max(1, item.quantity - 1)
-                                )
-                              }
-                            >
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="px-3">{item.quantity}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 px-2"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </div>
+                return (
+                  <Card key={item.id} className="mb-4">
+                    <CardContent className="p-4">
+                      <div className="flex gap-4">
+                        <img
+                          src={product.imagemUrl}
+                          alt={product.nome}
+                          className="w-20 h-20 object-cover rounded"
+                        />
 
-                          <div className="flex items-center gap-4">
-                            <span className="font-bold">
-                              R$ {(item.price * item.quantity).toFixed(2)}
-                            </span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-red-500 hover:text-red-700"
-                              onClick={() => removeFromCart(item.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                        <div className="flex-1">
+                          <h3 className="font-medium">{product.nome}</h3>
+                          {/* <p className="text-sm text-gray-500 mb-2">
+                            ID do vendedor: {product.userId}
+                          </p> */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center border rounded">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2"
+                                onClick={() =>
+                                  updateQuantity(item.id, Math.max(1, item.quantity - 1))
+                                }
+                              >
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="px-3">{item.quantity}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2"
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                              <span className="font-bold">
+                                R$ {(product.price * item.quantity).toFixed(2)}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700"
+                                onClick={() => removeFromCart(item.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
 
             <div>
               <Card>
                 <CardContent className="p-4">
                   <h3 className="font-bold text-lg mb-4">Resumo do Pedido</h3>
-
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
@@ -132,11 +145,7 @@ const CartPage = () => {
                     </div>
                   </div>
 
-                  <Button
-                    className="w-full mt-4"
-                    size="lg"
-                    onClick={handleCheckout}
-                  >
+                  <Button className="w-full mt-4" size="lg" onClick={handleCheckout}>
                     Finalizar Compra
                   </Button>
                 </CardContent>

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Search } from "lucide-react";
+import { getAllProducts } from "@/back/api";
 import Header from "@/components/Header";
 import CategoryButton from "@/components/CategoryButton";
-import ProductCard from "@/components/ProductCard";
+import ProductCard, { ProductProps } from "@/components/ProductCard";
 import categories from "@/data/categories";
-import products from "@/data/products";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +18,9 @@ import {
 const ProductsPage = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const [products, setProducts] = useState<ProductProps[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [bestOffers, setBestOffers] = useState(products.slice(0, 6));
@@ -28,6 +29,19 @@ const ProductsPage = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   
 
   useEffect(() => {
+    const fetchProducts = async () => {
+        const response = await getAllProducts();
+
+        if (response.ok) {
+            setProducts(response.data);
+        } else {
+            setError(response.error);
+        }
+
+        setLoading(false);
+    }
+
+    fetchProducts();
     const params = new URLSearchParams(location.search);
     const query = params.get("search");
     if (query) {
@@ -48,19 +62,19 @@ const ProductsPage = ({ onSearch }: { onSearch?: (query: string) => void }) => {
 
     if (selectedCategory) {
       filtered = filtered.filter(
-        (product) => product.category === selectedCategory
+        (product) => product.categoria === selectedCategory
       );
     }
 
     if (searchQuery) {
       filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.nome.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     setFilteredProducts(filtered);
     setBestOffers(filtered.slice(0, 6));
-  }, [selectedCategory, searchQuery]);
+  }, [products, selectedCategory, searchQuery]);
 
   const handlerSearch = (query: string) => {
     setSearchQuery(query);
@@ -173,9 +187,9 @@ const ProductsPage = ({ onSearch }: { onSearch?: (query: string) => void }) => {
         </div>
 
         {/* Todos os produtos */}
-        <div className="section">
+        <div className="section bg-f1">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Todos os Produtos</h2>
+            <h2 className="section-title">Todos os Produtos:</h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">

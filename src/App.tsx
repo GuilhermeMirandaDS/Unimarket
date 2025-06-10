@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import { CartProvider } from "./hooks/use-cart";
 import "./global.css";
 import UserPage from "./pages/UserPage";
+import UserInfoPage from "./components/Profile";
 
 const queryClient = new QueryClient();
 
@@ -36,10 +37,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/products" element={<ProductsPage />} />
-              <Route
-                path="/products/:productId"
-                element={<ProductDetailPage />}
-              />
+              <Route path="/products/:id" element={<ProductDetailPage />}/>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/" element={<Navigate to="/products" replace />} />

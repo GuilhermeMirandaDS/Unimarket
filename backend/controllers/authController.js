@@ -1,12 +1,12 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { User } = require('../models');
 
 exports.register = async (req, res) => {
-  const { email, password, name, tag } = req.body;
+  const { email, password, name, tag, img } = req.body;
   try {
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hash, name, tag });
+    const user = await User.create({ email, password: hash, name, tag, urlImg: img });
     res.status(201).json({ message: 'Usuário registrado!', user });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -33,10 +33,12 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.getUser = async (req, res) => {
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const user = await User.findByPk(req.user.id, {
-      attributes: ['id', 'name', 'tag']
+    const user = await User.findByPk(id, {
+      attributes: ['id', 'name', 'tag', 'urlImg']
     });
 
     if (!user) {
@@ -44,7 +46,7 @@ exports.getUser = async (req, res) => {
     }
 
     res.json(user);
-  } catch (err){
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };

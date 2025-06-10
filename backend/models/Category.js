@@ -1,9 +1,11 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('./index');
-
-const Category = sequelize.define('Category', {
+module.exports = (sequelize, DataTypes) => {
+  const Category = sequelize.define('Category', {
     name: { type: DataTypes.STRING, allowNull: false },
-});
+  });
 
+  Category.associate = (models) => {
+    Category.hasMany(models.Product, { foreignKey: 'categoria' });
+  };
 
-module.exports = Category;
+  return Category;
+};

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
 import { useNavigate } from "react-router-dom";
-import { getAllProducts } from '@/back/api';
+import { useSellerInfo } from "@/data/sellerInfo";
 
 export interface ProductProps {
   id: number;
@@ -33,6 +33,7 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const seller = useSellerInfo(userId);
   
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -84,19 +85,19 @@ const ProductCard = ({
             ({(rating * 10).toFixed(0)})
           </span>
         </div> */}
-
-        {/*<span className="seller-title">Vendedor(a):</span>
-        <div className="seller flex items-center">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="seller-img"
-          />
-          <div className="seller-info">
-            <span className="seller-name">{user.name}</span>
-            <span className="seller-grad">{user.tag}</span>
-          </div>
-        </div>*/}
+        
+        <span className="seller-title">Vendedor(a):</span>
+          {seller ? (
+            <div className="seller flex items-center">
+              <img src={seller.avatar} alt={seller.name} className="seller-img"/>
+              <div className="seller-info">
+                <span className="seller-name">{seller.name}</span>
+                <span className="seller-grad">{seller.tag}</span>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400">Carregando vendedor...</p>
+          )}
 
 
         <div className="buy-form">

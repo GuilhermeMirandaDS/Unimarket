@@ -1,11 +1,4 @@
-import { jwtDecode } from 'jwt-decode';
-
-type UserTokenPayload = {
-  id: number;
-  email: string;
-  name: string;
-  tag: number;
-};
+import { useEffect, useState } from 'react';
 
 const tagMap: Record<number, string> = {
   1: 'Vendedor',
@@ -13,21 +6,36 @@ const tagMap: Record<number, string> = {
   3: 'Funcionário',
 };
 
-export function getUserInfo() {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
+export function useUserInfo(id: number | null) {
+  const [user, setUser] = useState<null | {
+    name: string;
+    tag: string;
+    avatar: string;
+  }>(null);
 
-  try {
-    const userData = jwtDecode<UserTokenPayload>(token);
-    return {
-      id: userData.id,
-      email: userData.email,
-      name: userData.name,
-      tagNumber: userData.tag,
-      tag: tagMap[userData.tag] || 'Desconhecido',
+  useEffect(() => {
+    if (!id) return;
+    console.log(id);
+
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/users/${id}`);
+        if (!res.ok) throw new Error("Erro ao buscar usuário");
+        const data = await res.json();
+
+        setUser({
+          name: data.name,
+          tag: tagMap[data.tag] || "Desconhecido",
+          avatar: data.urlImg,
+        });
+      } catch (err) {
+        console.error("Erro ao buscar usuário:", err);
+        setUser(null);
+      }
     };
-  } catch (e) {
-    console.error('Token inválido ou mal formatado');
-    return null;
-  }
+
+    fetchUser();
+  }, [id]);
+
+  return user;
 }

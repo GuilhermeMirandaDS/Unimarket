@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [tag, setTag] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [img, setImg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("0");
 
@@ -34,7 +35,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     const authFunc = isLogin ? login : register;
-    const result = isLogin ? await login(email, password) : await register({email, password, name, tag: Number(selectedOption) });
+    const result = isLogin ? await login(email, password) : await register({email, password, name, img, tag: Number(selectedOption) });
     
     setIsLoading(false);
 
@@ -106,6 +107,19 @@ const LoginPage = () => {
                     <option value={2}>Aluno</option>
                     <option value={3}>Funcionário</option>
                   </select>
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Link da sua imagem de perfil
+                  </label>
+                  <Input
+                    id="img"
+                    type="text"
+                    value={img}
+                    onChange={(e) => setImg(e.target.value)}
+                    placeholder="Cole o link da sua imagem"
+                    required={!isLogin}
+                  />
                 </div>
               </div>
 

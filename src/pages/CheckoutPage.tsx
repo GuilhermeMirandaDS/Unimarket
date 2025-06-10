@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
@@ -18,7 +19,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,6 +26,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+
+import { getAllProducts } from "@/back/api";
+import { ProductProps } from "@/components/ProductCard";
 
 const formSchema = z.object({
   fullName: z.string().min(3, { message: "Nome completo é obrigatório" }),
@@ -49,6 +52,8 @@ type FormValues = z.infer<typeof formSchema>;
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cart, clearCart } = useCart();
+  const [products, setProducts] = useState<ProductProps[]>([]);
+
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const form = useForm<FormValues>({
@@ -69,11 +74,21 @@ const CheckoutPage = () => {
     },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (cart.length === 0) {
       navigate("/products");
     }
   }, [cart, navigate]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await getAllProducts();
+      if (response.ok) {
+        setProducts(response.data);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const onSubmit = (values: FormValues) => {
     console.log("Form values:", values);
@@ -97,17 +112,12 @@ const CheckoutPage = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Informações Pessoais</CardTitle>
-                <CardDescription>
-                  Preencha seus dados para entrega
-                </CardDescription>
+                <CardDescription>Preencha seus dados para entrega</CardDescription>
               </CardHeader>
 
               <CardContent>
                 <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                  >
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
@@ -116,16 +126,12 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>Nome Completo</FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder="Seu nome completo"
-                                {...field}
-                              />
+                              <Input placeholder="Seu nome completo" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-
                       <FormField
                         control={form.control}
                         name="email"
@@ -133,11 +139,7 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="seu@email.com"
-                                {...field}
-                              />
+                              <Input type="email" placeholder="seu@email.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -171,10 +173,7 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>Endereço</FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder="Rua, número, complemento"
-                                {...field}
-                              />
+                              <Input placeholder="Rua, número, complemento" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -195,7 +194,6 @@ const CheckoutPage = () => {
                             </FormItem>
                           )}
                         />
-
                         <FormField
                           control={form.control}
                           name="state"
@@ -209,7 +207,6 @@ const CheckoutPage = () => {
                             </FormItem>
                           )}
                         />
-
                         <FormField
                           control={form.control}
                           name="zipCode"
@@ -239,16 +236,12 @@ const CheckoutPage = () => {
                             <FormItem>
                               <FormLabel>Número do Cartão</FormLabel>
                               <FormControl>
-                                <Input
-                                  placeholder="0000 0000 0000 0000"
-                                  {...field}
-                                />
+                                <Input placeholder="0000 0000 0000 0000" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-
                         <FormField
                           control={form.control}
                           name="cardName"
@@ -256,10 +249,7 @@ const CheckoutPage = () => {
                             <FormItem>
                               <FormLabel>Nome no Cartão</FormLabel>
                               <FormControl>
-                                <Input
-                                  placeholder="Nome impresso no cartão"
-                                  {...field}
-                                />
+                                <Input placeholder="Nome impresso no cartão" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -281,7 +271,6 @@ const CheckoutPage = () => {
                             </FormItem>
                           )}
                         />
-
                         <FormField
                           control={form.control}
                           name="cardCvv"
@@ -316,26 +305,27 @@ const CheckoutPage = () => {
               </CardHeader>
 
               <CardContent className="space-y-4">
-                {cart.map((item) => (
-                  <div key={item.id} className="flex justify-between">
-                    <div className="flex gap-2">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-12 h-12 object-cover rounded"
-                      />
-                      <div>
-                        <p className="font-medium text-sm">{item.name}</p>
-                        <p className="text-xs text-gray-500">
-                          Qtd: {item.quantity}
-                        </p>
+                {cart.map((item) => {
+                  const product = products.find((p) => p.id === item.id);
+                  return (
+                    <div key={item.id} className="flex justify-between">
+                      <div className="flex gap-2">
+                        <img
+                          src={product?.imagemUrl || "/placeholder.jpg"}
+                          alt={product?.nome || "Produto"}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                        <div>
+                          <p className="font-medium text-sm">{product?.nome || "Produto"}</p>
+                          <p className="text-xs text-gray-500">Qtd: {item.quantity}</p>
+                        </div>
                       </div>
+                      <p className="font-medium">
+                        R$ {(item.price * item.quantity).toFixed(2)}
+                      </p>
                     </div>
-                    <p className="font-medium">
-                      R$ {(item.price * item.quantity).toFixed(2)}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
 
                 <Separator />
 
@@ -358,10 +348,7 @@ const CheckoutPage = () => {
               </CardContent>
 
               <CardFooter>
-                <Button
-                  className="w-full"
-                  onClick={form.handleSubmit(onSubmit)}
-                >
+                <Button className="w-full" onClick={form.handleSubmit(onSubmit)}>
                   Finalizar Pedido
                 </Button>
               </CardFooter>

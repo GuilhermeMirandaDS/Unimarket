@@ -5,30 +5,45 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
-import { getUserInfo } from "@/data/userInfo";
+import { useUserInfo } from "@/data/userInfo";
+import { jwtDecode } from "jwt-decode";
+import ProfileSideBar from "@/components/Profile";
 
 
 
 const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   const isMobile = useIsMobile();
-  const user = getUserInfo();
   const [searchQuery, setSearchQuery] = useState("");
   const { cart } = useCart();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   
   useEffect(() => {
     const token = localStorage.getItem('token');
-    
     if (!token) {
       setIsAuthenticated(false);
       navigate("/login");
       return;
     }
 
-    setIsAuthenticated(true);
+    try {
+      const decoded: any = jwtDecode(token);
+      setUserId(decoded.id);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Erro ao decodificar o token:", error);
+      setIsAuthenticated(false);
+      navigate("/login");
+    }
   }, []);
 
+  const user = useUserInfo(userId);
+
+  if (!userId || !user) {
+    return <p>Carregando usuário...</p>;
+  }
 
   function logOut() {
     localStorage.removeItem("token");
@@ -48,6 +63,7 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
@@ -68,10 +84,13 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
                 </g>
                 </svg>
                 <ul className="second-level">
-                  <li className="menu-subitem">item 1</li>
-                  <li className="menu-subitem">item 1</li>
-                  <li className="menu-subitem">item 1</li>
-                  <li className="menu-subitem">item 1</li>
+                  <li className="menu-subitem">Apostilas</li>
+                  <li className="menu-subitem">Doces</li>
+                  <li className="menu-subitem">Roupas</li>
+                  <li className="menu-subitem">Livros</li>
+                  <li className="menu-subitem">Comida</li>
+                  <li className="menu-subitem">Eletrônicos</li>
+                  <li className="menu-subitem">Atlética</li>
                 </ul>
               </div>
               <a className="menu-tab" href="/">Sobre Nós</a>
@@ -87,11 +106,11 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pr-10 focus-visible:ring-blue-500"
-              />
+                />
               <button
                 type="submit"
                 className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
-              >
+                >
                 <Search className="h-5 w-5" />
               </button>
             </form>
@@ -107,16 +126,16 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
             </Button>
           ) : (
             <Button className="user-btn first-level-user" variant="ghost" size="icon">
-                <User className="h-5 w-5" />
+                <img src={user?.avatar} alt={user?.name} className="user-pfp"/>
                 <div className="user-info-header">
                   <span className="user-name-header">{user?.name}</span>
                   <p className="user-tag-header">{user?.tag}</p>
                 </div>
                 <ul className="second-level-user">
                   <li className="menu-subitem">
-                    <Link to="/user">
+                    <span onClick={() => setIsProfileOpen(true)} style={{ cursor: "pointer" }}>
                       Perfil
-                    </Link>
+                    </span>
                     </li>
                   <li className="menu-subitem">
                     <Link to="/user">
@@ -124,9 +143,9 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
                     </Link>
                   </li>
                   <li className="menu-subitem">
-                    <button onClick={logOut}>
+                    <a onClick={logOut}>
                       Sair
-                    </button>
+                    </a>
                     </li>
                 </ul>
             </Button>
@@ -154,17 +173,19 @@ const Header = ({ onSearch }: { onSearch?: (query: string) => void }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pr-10"
-            />
+              />
             <button
               type="submit"
               className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
-            >
+              >
               <Search className="h-5 w-5" />
             </button>
           </form>
         )}
       </div>
     </header>
+    <ProfileSideBar isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+  </>
   );
 };
 

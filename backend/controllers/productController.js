@@ -1,4 +1,5 @@
-const Product = require('../models/Product');
+const { Product } = require('../models');
+const { User } = require('../models');
 
 exports.addProduct = async (req, res) => {
   const { nome, descricao, imagemUrl, categoria, price, stock, userId, tags } = req.body;
@@ -32,6 +33,28 @@ exports.getAllProducts = async (req, res) => {
     const products = await Product.findAll();
     res.json(products);
   } catch (err) {
+    console.error("Erro no getAllProducts:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getProductById = async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const product = await Product.findByPk(id, {
+      include: {
+        model: User,
+        as: 'seller',
+        attributes: ['id', 'name', 'tag', 'urlImg']
+      }
+    });
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ error: 'Produto não encontrado' });
+    }
+  } catch (err) {
+    console.error('Erro no getProductById:', err);
     res.status(500).json({ error: err.message });
   }
 };

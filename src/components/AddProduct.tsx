@@ -94,11 +94,13 @@ interface ModalCadastroProps {
                     <div className="new-prod-category">
                         <span>Categoria:</span>
                         <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-                            <option value={1}>categoria 1</option>
-                            <option value={2}>categoria 2</option>
-                            <option value={3}>categoria 3</option>
-                            <option value={4}>categoria 4</option>
-                            <option value={5}>categoria 5</option>
+                            <option value={1}>Apostila</option>
+                            <option value={2}>Doces</option>
+                            <option value={3}>Roupas</option>
+                            <option value={4}>Livros</option>
+                            <option value={5}>Comida</option>
+                            <option value={6}>Eletrônicos</option>
+                            <option value={7}>Atlética</option>
                         </select>
                     </div>
                     <div className="new-prod-price">

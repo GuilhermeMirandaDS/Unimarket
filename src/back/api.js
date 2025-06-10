@@ -1,5 +1,34 @@
 const API_URL = 'http://localhost:3000/api';
 
+const tagMap = {
+  1: 'Vendedor',
+  2: 'Aluno',
+  3: 'Funcionário',
+};
+
+export async function getUserInfoById(userId) {
+  try {
+    const res = await fetch(`${API_URL}/users/${userId}`);
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Erro ao buscar usuário');
+    }
+
+    const user = await res.json();
+
+    return {
+      id: user.id,
+      name: user.name,
+      urlImg: user.urlImg,
+      tagNumber: user.tag,
+      tag: tagMap[user.tag] || 'Desconhecido',
+    };
+  } catch (error) {
+    console.error('Erro ao buscar usuário por ID:', error);
+    return null;
+  }
+}
+
 export async function login(email, password) {
   const res = await fetch(`${API_URL}/login`, {
     method: 'POST',
@@ -21,7 +50,6 @@ export async function register(userData) {
 }
 
 export async function fetchUser(token) {
-  console.log("Token enviado:", token);
 
   const res = await fetch(`${API_URL}/me`, {
     method: 'GET',
@@ -32,7 +60,7 @@ export async function fetchUser(token) {
   });
 
   if (!res.ok) {
-    const text = await res.text(); // Isso mostra o erro real do servidor
+    const text = await res.text();
     console.error("Erro bruto do backend:", text);
     throw new Error('Erro ao buscar usuário');
   }
@@ -55,6 +83,17 @@ export async function getAllProducts() {
     return { ok: false, error: error.message || 'Erro de conexão' };
   }
 }
+
+export const getProductById = async (id) => {
+  try {
+    const res = await fetch(`${API_URL}/products/${id}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Erro ao buscar produto');
+    return { ok: true, data };
+  } catch (error) {
+    return { ok: false, error: String(error) };
+  }
+};
 
 
 export async function addProduct(productData, token) {

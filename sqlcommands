@@ -1,7 +1,9 @@
 INSERT INTO categories (name)
 VALUES
-  ('Eletrônicos'),
+  ('Apostila'),
+  ('Doces'),
   ('Roupas'),
-  ('Alimentos'),
   ('Livros'),
-  ('Brinquedos');
+  ('Comida'),
+  ('Eletrônicos'),
+  ('Atlética');

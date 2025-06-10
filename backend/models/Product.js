@@ -1,20 +1,19 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('./index');
-const User = require('./User');
-const Category = require('./Category');
+module.exports = (sequelize, DataTypes) => {
+  const Product = sequelize.define('Product', {
+    nome: { type: DataTypes.STRING, allowNull: false },
+    descricao: { type: DataTypes.STRING, allowNull: true },
+    imagemUrl: { type: DataTypes.STRING, allowNull: true },
+    categoria: { type: DataTypes.INTEGER, allowNull: false },
+    price: { type: DataTypes.FLOAT, allowNull: false },
+    stock: { type: DataTypes.INTEGER, allowNull: false },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    tags: { type: DataTypes.STRING, allowNull: true }
+  });
 
-const Product = sequelize.define('Product', {
-  nome: { type: DataTypes.STRING, allowNull: false },
-  descricao: { type: DataTypes.STRING, allowNull: true },
-  imagemUrl: { type: DataTypes.STRING, allowNull: true },
-  categoria: { type: DataTypes.INTEGER, references: {model: Category, key: 'id'}, allowNull: false },
-  price: { type: DataTypes.FLOAT, allowNull: false },
-  stock: { type: DataTypes.INTEGER, allowNull: false },
-  userId: { type: DataTypes.INTEGER, references: {model: User, key: 'id'}, allowNull: false },
-  tags: { type: DataTypes.STRING, allowNull: true }
-});
+  Product.associate = (models) => {
+    Product.belongsTo(models.User, { foreignKey: 'userId', as: 'seller' });
+    Product.belongsTo(models.Category, { foreignKey: 'categoria' });
+  };
 
-Product.belongsTo(User, { foreignKey: 'userId' });
-Product.belongsTo(Category, { foreignKey: 'categoryId' });
-
-module.exports = Product;
+  return Product;
+};

@@ -12,18 +12,18 @@ const categories = [
   },
   {
     id: 3,
-    name: "Refeições",
-    icon: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400&auto=format"
+    name: "Roupas",
+    icon: "https://media.istockphoto.com/id/1492815833/pt/foto/vintage-theatrical-clothes-in-dressing-room.jpg?s=612x612&w=0&k=20&c=zIXMNnsyN05ChcDu6KAGIfToj6QKuWyOUIETPvglJqE="
   },
   {
     id: 4,
-    name: "Artigos",
+    name: "Livros",
     icon: "https://images.unsplash.com/photo-1550399105-c4db5fb85c18?q=80&w=400&auto=format"
   },
   {
     id: 5,
-    name: "Itens Pessoais",
-    icon: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=400&auto=format"
+    name: "Comida",
+    icon: "https://www.lans.pt/wp-content/uploads/2022/09/shutterstock_1722757993-1.jpg"
   },
   {
     id: 6,
@@ -32,8 +32,8 @@ const categories = [
   },
   {
     id: 7,
-    name: "Livros",
-    icon: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&auto=format"
+    name: "Atlética",
+    icon: "https://i.pinimg.com/474x/a3/82/26/a38226c1c77aaff39ad02630c80332cb.jpg"
   }
 ];
 

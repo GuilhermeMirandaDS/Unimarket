@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getAllProducts } from "@/back/api";
 import StarRating from '@/components/StarRating';
 import ProductCard, { ProductProps } from "@/components/ProductCard";
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
-import { getUserInfo } from "@/data/userInfo";
+import { useUserInfo } from "@/data/userInfo";
+import { jwtDecode } from "jwt-decode";
 import ModalCadastro from '@/components/AddProduct';
 import {
     Carousel,
@@ -20,20 +21,20 @@ const UserPage = () => {
     const [products, setProducts] = useState<ProductProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const user = getUserInfo();
+    const [userId, setUserId] = useState<number | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
-        if (!token) {
-            setIsAuthenticated(false);
-            navigate("/login");
-            return;
+        if (token) {
+        try {
+            const decoded: any = jwtDecode(token);
+            setUserId(decoded.id);
+        } catch (e) {
+            console.error("Erro ao decodificar o token:", e);
         }
-
-        setIsAuthenticated(true);
+        }
 
         const fetchProducts = async () => {
             const response = await getAllProducts();
@@ -50,14 +51,14 @@ const UserPage = () => {
         fetchProducts();
     }, []);
 
+    const user = useUserInfo(userId);
+
     if (loading) return <p>Carregando produtos...</p>;
     if (error) return <p className="text-red-500">Erro: {error}</p>;
 
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-
-    console.log(products);
     
     return (
         <div className="min-h-screen bg-gray-50">
@@ -86,7 +87,7 @@ const UserPage = () => {
                     <h2>Meus produtos anunciados:</h2>
                     <div className="userpage-cards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                         {products
-                            .filter(product => product.userId === user?.id)
+                            .filter(product => product.userId === userId)
                             .map((product) => (
                             <ProductCard key={product.id} {...product} />
                         ))}
